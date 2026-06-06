@@ -26,3 +26,8 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+/misc.xml
+/inspectionProfiles/profiles_settings.xml
+/modules.xml
+/tokenizer.iml
+/vcs.xml
