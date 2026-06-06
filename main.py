@@ -1,4 +1,4 @@
-from BasicTokenizer import BasicTokenizer
+from basic_tokenizer import BasicTokenizer
 
 
 def main():
