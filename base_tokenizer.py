@@ -17,6 +17,17 @@ def get_stats(ids, counts=None):
         counts[pair] = counts.get(pair, 0) + 1
     return counts
 
+def print_tokens(tokenizer, text, name):
+    ids = tokenizer.encode(text)
+    print(f"\n{name}")
+    print("ids:", ids)
+    print("count:", len(ids))
+
+    for idx in ids:
+        raw = tokenizer.vocab[idx]
+        piece = raw.decode("utf-8", errors="replace")
+        print(f"{idx:>4} | {raw!r:<15} | {piece!r}")
+
 class Tokenizer:
     def __init__(self):
         self.merges = {}
@@ -37,4 +48,14 @@ class Tokenizer:
         for (p0, p1), idx in self.merges.items():
             vocab[idx] = vocab[p0] + vocab[p1]
         return vocab
+
+    def _encode_chunk(self, ids):
+        while len(ids) >= 2:
+            stats = get_stats(ids)
+            pair = min(stats, key=lambda p: self.merges.get(p, float("inf")))
+            if pair not in self.merges:
+                break
+            idx = self.merges[pair]
+            ids = merge(ids, pair, idx)
+        return ids
 

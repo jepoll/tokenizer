@@ -35,15 +35,9 @@ class BasicTokenizer(Tokenizer):
             self.vocab[idx] = self.vocab[p0] + self.vocab[p1]
 
     def encode(self, text):
-        tokens = text.encode("utf-8")
-        while len(tokens) >= 2:
-            stats = get_stats(tokens)
-            pair = min(stats, key=lambda p: self.merges.get(p, float("inf")))
-            if pair not in self.merges:
-                break
-            idx = self.merges[pair]
-            tokens = merge(tokens, pair, idx)
-        return tokens
+        ids = list(text.encode("utf-8"))
+        return self._encode_chunk(ids)
+
 
     def decode(self, ids):
         tokens = b"".join(self.vocab[idx] for idx in ids)

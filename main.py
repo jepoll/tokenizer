@@ -1,15 +1,19 @@
+from base_tokenizer import print_tokens
 from basic_tokenizer import BasicTokenizer
-
+from regex_tokenizer import RegexTokenizer
 
 def main():
     txt = open("tests/taylorswift.txt", "r", encoding="utf-8").read()
-    tokenizer = BasicTokenizer()
+    basic = BasicTokenizer()
+    basic.train(txt, 300)
 
-    tokenizer.train(txt, 300, verbose=True)
+    regex = RegexTokenizer()
+    regex.train(txt, 300)
 
-    test_string = "hello world,  😄🙂"
+    test_string = "taylor. taylor! taylor?"
 
-    print(tokenizer.decode(tokenizer.encode(test_string)))
+    print_tokens(basic, test_string, "BasicTokenizer")
+    print_tokens(regex, test_string, "RegexTokenizer")
 
 if __name__ == '__main__':
     main()
